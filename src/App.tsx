@@ -20,10 +20,13 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  // API URL
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:3001/students');
+      const res = await fetch(`${API_URL}/students`);
       if (!res.ok) throw new Error('Failed to fetch students');
       const data = await res.json();
       setStudents(data);
@@ -48,7 +51,7 @@ function App() {
 
   const handleAddStudent = async (studentData: StudentFormData) => {
     try {
-      const res = await fetch('http://localhost:3001/students', {
+      const res = await fetch(`${API_URL}/students`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(studentData)
@@ -65,7 +68,7 @@ function App() {
 
   const handleEditStudent = async (id: string, updates: StudentFormData) => {
     try {
-      const res = await fetch(`http://localhost:3001/students/${id}`, {
+      const res = await fetch(`${API_URL}/students/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates)
@@ -91,7 +94,7 @@ function App() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/students/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/students/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete student');
       setStudents(students.filter(student => student.id !== id));
       alert('Student deleted successfully!');
