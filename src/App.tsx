@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { StudentCard } from './components/StudentCard';
@@ -23,7 +23,7 @@ function App() {
   // API URL
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
-  const fetchStudents = async () => {
+  const fetchStudents = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(`${API_URL}/students`);
@@ -35,11 +35,11 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [fetchStudents]);
 
   // Reset to page 1 when search or filter changes
   useEffect(() => {
